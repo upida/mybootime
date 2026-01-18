@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'MyBooTime - Task Reminder',
-  description: 'Task reminder dengan notifikasi text-to-speech',
+  description: 'Task reminder with text-to-speech notifications',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="id">
+    <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" />
         <link rel="apple-touch-icon" href="/icon.svg" />

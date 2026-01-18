@@ -6,12 +6,18 @@ import { speak, showNotification, requestNotificationPermission } from '@/lib/no
 import TaskForm from './TaskForm';
 import TaskItem from './TaskItem';
 import DateNavigator from './DateNavigator';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 export default function TaskList() {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDate());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{ isOpen: boolean; taskId: string; taskTitle: string }>({
+    isOpen: false,
+    taskId: '',
+    taskTitle: '',
+  });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -85,11 +91,22 @@ export default function TaskList() {
     loadTasksForDate(selectedDate);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this task?')) {
-      deleteTask(id);
-      loadTasksForDate(selectedDate);
-    }
+  const handleDelete = (id: string, taskTitle: string) => {
+    setDeleteConfirmModal({
+      isOpen: true,
+      taskId: id,
+      taskTitle,
+    });
+  };
+
+  const confirmDelete = () => {
+    deleteTask(deleteConfirmModal.taskId);
+    loadTasksForDate(selectedDate);
+    setDeleteConfirmModal({
+      isOpen: false,
+      taskId: '',
+      taskTitle: '',
+    });
   };
 
   const sortedTasks = [...tasks].sort((a, b) => {
@@ -158,6 +175,19 @@ export default function TaskList() {
           ))
         )}
       </div>
+
+      <DeleteConfirmModal
+        isOpen={deleteConfirmModal.isOpen}
+        taskTitle={deleteConfirmModal.taskTitle}
+        onConfirm={confirmDelete}
+        onCancel={() =>
+          setDeleteConfirmModal({
+            isOpen: false,
+            taskId: '',
+            taskTitle: '',
+          })
+        }
+      />
     </div>
   );
 }

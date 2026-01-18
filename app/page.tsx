@@ -10,7 +10,7 @@ export default function Home() {
             MyBooTime
           </h1>
           <p className="text-white/80 text-sm md:text-base">
-            Task Reminder with Voice Notifications
+            Be my boo, need your time. When with me, be focused!
           </p>
         </header>
 

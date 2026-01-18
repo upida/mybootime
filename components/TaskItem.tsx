@@ -6,7 +6,7 @@ interface TaskItemProps {
   task: Task;
   onToggle: (id: string) => void;
   onEdit: (task: Task) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string, taskTitle: string) => void;
 }
 
 export default function TaskItem({ task, onToggle, onEdit, onDelete }: TaskItemProps) {
@@ -55,7 +55,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: TaskItemP
           </button>
           
           <button
-            onClick={() => onDelete(task.id)}
+            onClick={() => onDelete(task.id, task.title)}
             className="p-2 rounded-lg bg-red-500/30 hover:bg-red-500/50 transition-all"
             title="Delete"
           >
