@@ -1,11 +1,55 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#f5576c;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" rx="80" fill="url(#grad)"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="180" font-weight="bold" fill="white">MB</text>
-</svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="26.458332mm"
+   height="25.838415mm"
+   viewBox="0 0 26.458332 25.838415"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1"><linearGradient
+       id="grad"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1"><stop
+         offset="0%"
+         stop-color="#ff4da6"
+         id="stop1" /><stop
+         offset="100%"
+         stop-color="#4da6ff"
+         id="stop2" /></linearGradient><linearGradient
+       xlink:href="#grad"
+       id="linearGradient1"
+       x1="148.23232"
+       y1="103.56347"
+       x2="247.05386"
+       y2="202.38501"
+       gradientTransform="matrix(0.26773851,0,0,0.26146534,38.192038,33.891324)"
+       gradientUnits="userSpaceOnUse" /></defs><g
+     id="layer1"
+     transform="translate(-77.879541,-60.96958)"><path
+       d="m 91.108704,65.641324 c -3.96875,-6.614584 -13.229167,-6.614584 -13.229167,2.645833 0,10.583333 5.291667,18.520833 13.229167,18.520833 7.9375,0 13.229166,-7.9375 13.229166,-18.520833 0,-9.260417 -9.260416,-9.260417 -13.229166,-2.645833 z"
+       fill="url(#grad)"
+       id="path2"
+       style="fill:url(#linearGradient1);stroke-width:0.264583" /><line
+       x1="91.108704"
+       y1="76.224655"
+       x2="91.108704"
+       y2="68.287155"
+       stroke="#ffffff"
+       stroke-width="2.11667"
+       stroke-linecap="round"
+       id="line2" /><line
+       x1="91.108704"
+       y1="76.224655"
+       x2="99.046204"
+       y2="76.224655"
+       stroke="#ffffff"
+       stroke-width="2.11667"
+       stroke-linecap="round"
+       id="line3" /></g></svg>
