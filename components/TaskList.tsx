@@ -3,10 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Task, getTasks, addTask, updateTask, deleteTask, toggleTaskComplete, getTasksByDate, getTodayDate, formatDate } from '@/lib/storage';
 import { speak, showNotification, requestNotificationPermission } from '@/lib/notifications';
+import { VoiceCommand } from '@/lib/voiceCommands';
 import TaskForm from './TaskForm';
 import TaskItem from './TaskItem';
 import DateNavigator from './DateNavigator';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import VoiceCommandComponent from './VoiceCommand';
 
 export default function TaskList() {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDate());
@@ -18,6 +20,7 @@ export default function TaskList() {
     taskId: '',
     taskTitle: '',
   });
+  const [voiceFeedback, setVoiceFeedback] = useState<string>('');
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -109,6 +112,78 @@ export default function TaskList() {
     });
   };
 
+  const handleVoiceCommand = (command: VoiceCommand, transcript: string) => {
+    let feedbackMessage = '';
+    
+    switch (command.type) {
+      case 'add':
+        if (command.title) {
+          const newTaskData: Omit<Task, 'id' | 'createdAt'> = {
+            title: command.title,
+            description: command.description || '',
+            dueDate: selectedDate,
+            dueTime: command.time || '12:00',
+            completed: false,
+          };
+          addTask(newTaskData);
+          loadTasksForDate(selectedDate);
+          feedbackMessage = `Task "${command.title}" added successfully${command.time ? ` at ${command.time}` : ''}!`;
+          speak(feedbackMessage);
+        } else {
+          feedbackMessage = 'Please specify a task title. For example: "Add Meeting at 2 PM"';
+        }
+        break;
+        
+      case 'remove':
+        if (command.title) {
+          const taskToDelete = tasks.find(t => 
+            t.title.toLowerCase().includes(command.title!.toLowerCase())
+          );
+          if (taskToDelete) {
+            deleteTask(taskToDelete.id);
+            loadTasksForDate(selectedDate);
+            feedbackMessage = `Task "${taskToDelete.title}" removed successfully!`;
+            speak(feedbackMessage);
+          } else {
+            feedbackMessage = 'Task not found. Please specify the exact title.';
+          }
+        } else {
+          feedbackMessage = 'Please specify which task to remove. For example: "Remove Meeting"';
+        }
+        break;
+        
+      case 'update':
+        if (command.title) {
+          const taskToUpdate = tasks.find(t => 
+            t.title.toLowerCase().includes(command.title!.toLowerCase())
+          );
+          if (taskToUpdate) {
+            const updates: Partial<Task> = {};
+            
+            if (command.time) updates.dueTime = command.time;
+            if (command.description) updates.description = command.description;
+            
+            updateTask(taskToUpdate.id, updates);
+            loadTasksForDate(selectedDate);
+            feedbackMessage = `Task "${taskToUpdate.title}" updated successfully${command.time ? ` to ${command.time}` : ''}!`;
+            speak(feedbackMessage);
+          } else {
+            feedbackMessage = 'Task not found. Please specify the exact title.';
+          }
+        } else {
+          feedbackMessage = 'Please specify which task to update. For example: "Update Meeting at 3 PM"';
+        }
+        break;
+        
+      case 'unknown':
+        feedbackMessage = 'Command not recognized. Try "Add [title] at [time]", "Remove [title]", or "Update [title] at [time]"';
+        break;
+    }
+    
+    setVoiceFeedback(feedbackMessage);
+    setTimeout(() => setVoiceFeedback(''), 5000);
+  };
+
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1;
@@ -119,6 +194,17 @@ export default function TaskList() {
   return (
     <div className="space-y-6">
       <DateNavigator selectedDate={selectedDate} onDateChange={setSelectedDate} />
+      
+      {/* Voice Command Section */}
+      <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+        <h3 className="text-lg font-semibold text-white mb-3">🎤 Voice Commands</h3>
+        <VoiceCommandComponent onCommand={handleVoiceCommand} />
+        {voiceFeedback && (
+          <div className="mt-3 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+            <p className="text-white text-sm font-medium">{voiceFeedback}</p>
+          </div>
+        )}
+      </div>
       
       {!showForm && !editingTask && (
         <button
